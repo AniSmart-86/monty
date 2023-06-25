@@ -1,25 +1,27 @@
 #include "monty.h"
 
-/**
- * f_pstr - function that prints the string starting at the top of the stack.
- * @head: stack head
- * @counter: line_number
- * Return: none
-*/
-void f_pstr(stack_t **head, unsigned int counter)
-{
-	stack_t *h;
-	(void)counter;
 
-	h = *head;
-	while (h)
+/**
+ * sub - substracts the top two elements of the stack.
+ * @stack: double pointer to the head of the stack
+ * @line_number: the line number
+ */
+
+void sub(stack_t **stack, unsigned int line_number)
+{
+	stack_t *temp = NULL;
+	int sum = 0;
+
+	if (!*stack || !(*stack)->next)
 	{
-		if (h->n > 127 || h->n <= 0)
-		{
-			break;
-		}
-		printf("%c", h->n);
-		h = h->next;
+		fprintf(stderr, "L%d: can't sub, stack too short\n", line_number);
+		free_stack(*stack);
+		exit(EXIT_FAILURE);
 	}
-	printf("\n");
+	temp = (*stack)->next;
+	sum = temp->n;
+	sum -= (*stack)->n;
+	pop(stack, line_number);
+	temp->n = sum;
 }
+

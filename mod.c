@@ -1,42 +1,39 @@
 #include "monty.h"
 
 /**
- * f_mod - function that computes the rest of the division of the second
- * top element of the stack by the top element of the stack
- * @head: stack head
- * @counter: line_number
- * Return: none
-*/
-void f_mod(stack_t **head, unsigned int counter)
+ * mod - computes the remainder of the division of the second top element
+ *        of the stack by the top element
+ * @stack: double pointer to top node in stack
+ * @line_number: line number of command
+ *
+ * Description: This function computes the remainder of the division of the
+ * second top element of the stack by the top element, stores the result in the
+ * second top element, and removes the top element. If the stack contains less
+ * than two elements, it prints an error message and exits with the status
+ * EXIT_FAILURE. If the top element is 0, it prints an error message regarding
+ * division by zero and exits with the status EXIT_FAILURE.
+ */
+void mod(stack_t **stack, unsigned int line_number)
 {
-	stack_t *h;
-	int len = 0, aux;
+	stack_t *temp;
 
-	h = *head;
-	while (h)
+	if (*stack == NULL || (*stack)->next == NULL)
 	{
-		h = h->next;
-		len++;
-	}
-	if (len < 2)
-	{
-		fprintf(stderr, "L%d: can't mod, stack too short\n", counter);
-		fclose(bus.file);
-		free(bus.content);
-		free_stack(*head);
+		fprintf(stderr, "L%d: can't mod, stack too short\n", line_number);
+		free_stack(*stack);
 		exit(EXIT_FAILURE);
 	}
-	h = *head;
-	if (h->n == 0)
+
+	if ((*stack)->n == 0)
 	{
-		fprintf(stderr, "L%d: division by zero\n", counter);
-		fclose(bus.file);
-		free(bus.content);
-		free_stack(*head);
+		fprintf(stderr, "L%d: division by zero\n", line_number);
 		exit(EXIT_FAILURE);
 	}
-	aux = h->next->n % h->n;
-	h->next->n = aux;
-	*head = h->next;
-	free(h);
+
+	(*stack)->next->n %= (*stack)->n; /*Compute the remainder*/
+	temp = *stack;
+	*stack = (*stack)->next; /* Make the second top element the new top el*/
+	(*stack)->prev = NULL; /* Set the new top elmt's prev pointer to NULL*/
+
+	free(temp); /* Free the original top element*/
 }
