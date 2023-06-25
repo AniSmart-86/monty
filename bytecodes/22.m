@@ -1,14 +1,14 @@
 push 1
 push 2
-push 3
+push 10
+push 25
 pall
-add
+mod
 pall
 
 push 3
 push 2
-push 1
+push 0
 pall
-add
+mod
 pall
-
